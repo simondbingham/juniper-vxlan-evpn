@@ -1,0 +1,36 @@
+#SPINE1 config
+set system host-name SPINE1
+delete interfaces
+set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.0/31
+set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.2/31
+set interfaces xe-0/0/3 unit 0 family inet address 172.16.0.4/31
+set interfaces lo0 unit 0 family inet address 10.0.255.1/32
+
+#SPINE2 config
+set system host-name SPINE2
+delete interfaces
+set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.6/31
+set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.8/31
+set interfaces xe-0/0/3 unit 0 family inet address 172.16.0.10/31
+set interfaces lo0 unit 0 family inet address 10.0.255.2/32
+
+#LEAF3 config
+set system host-name LEAF3
+delete interfaces
+set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.1/31
+set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.7/31
+set interfaces lo0 unit 0 family inet address 10.0.255.3/32
+
+#LEAF4 config
+set system host-name LEAF4
+delete interfaces
+set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.3/31
+set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.9/31
+set interfaces lo0 unit 0 family inet address 10.0.255.4/32
+
+#LEAF5 config
+set system host-name LEAF5
+delete interfaces
+set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.5/31
+set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.11/31
+set interfaces lo0 unit 0 family inet address 10.0.255.5/32
