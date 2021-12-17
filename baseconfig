@@ -1,36 +1,178 @@
-#SPINE1 config
+
+
 set system host-name SPINE1
-delete interfaces
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set system extensions providers juniper license-type juniper deployment-scope commercial
+set system extensions providers chef license-type juniper deployment-scope commercial
 set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.0/31
 set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.2/31
 set interfaces xe-0/0/3 unit 0 family inet address 172.16.0.4/31
+set interfaces em1 unit 0 family inet address 169.254.0.2/24
 set interfaces lo0 unit 0 family inet address 10.0.255.1/32
+set forwarding-options storm-control-profiles default all
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then load-balance per-packet
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then accept
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from protocol direct
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from route-filter 10.0.255.0/24 orlonger
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK then accept
+set routing-options forwarding-table export LOAD_BALANCE
+set protocols bgp group underlay export LOOPBACK>UNDERLAY
+set protocols bgp group underlay local-as 65101
+set protocols bgp group underlay multipath multiple-as
+set protocols bgp group underlay neighbor 172.16.0.1 peer-as 65103
+set protocols bgp group underlay neighbor 172.16.0.3 peer-as 65104
+set protocols bgp group underlay neighbor 172.16.0.5 peer-as 65105
+set protocols lldp interface all
+set protocols igmp-snooping vlan default
+set vlans default vlan-id 1
 
-#SPINE2 config
+
+
 set system host-name SPINE2
-delete interfaces
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set system extensions providers juniper license-type juniper deployment-scope commercial
+set system extensions providers chef license-type juniper deployment-scope commercial
 set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.6/31
 set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.8/31
 set interfaces xe-0/0/3 unit 0 family inet address 172.16.0.10/31
+set interfaces em1 unit 0 family inet address 169.254.0.2/24
 set interfaces lo0 unit 0 family inet address 10.0.255.2/32
+set forwarding-options storm-control-profiles default all
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then load-balance per-packet
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then accept
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from protocol direct
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from route-filter 10.0.255.0/24 orlonger
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK then accept
+set routing-options forwarding-table export LOAD_BALANCE
+set protocols bgp group underlay export LOOPBACK>UNDERLAY
+set protocols bgp group underlay local-as 65102
+set protocols bgp group underlay multipath multiple-as
+set protocols bgp group underlay neighbor 172.16.0.7 peer-as 65103
+set protocols bgp group underlay neighbor 172.16.0.9 peer-as 65104
+set protocols bgp group underlay neighbor 172.16.0.11 peer-as 65105
+set protocols lldp interface all
+set protocols igmp-snooping vlan default
+set vlans default vlan-id 1
 
-#LEAF3 config
+
 set system host-name LEAF3
-delete interfaces
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set system extensions providers juniper license-type juniper deployment-scope commercial
+set system extensions providers chef license-type juniper deployment-scope commercial
+set interfaces xe-0/0/0 unit 0 family ethernet-switching vlan members v10
 set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.1/31
 set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.7/31
+set interfaces em1 unit 0 family inet address 169.254.0.2/24
 set interfaces lo0 unit 0 family inet address 10.0.255.3/32
+set forwarding-options storm-control-profiles default all
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then load-balance per-packet
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then accept
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from protocol direct
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from route-filter 10.0.255.0/24 orlonger
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK then accept
+set routing-options router-id 10.0.255.3
+set routing-options forwarding-table export LOAD_BALANCE
+set protocols bgp group underlay export LOOPBACK>UNDERLAY
+set protocols bgp group underlay local-as 65103
+set protocols bgp group underlay multipath multiple-as
+set protocols bgp group underlay neighbor 172.16.0.0 peer-as 65101
+set protocols bgp group underlay neighbor 172.16.0.6 peer-as 65102
+set protocols bgp group overlay local-address 10.0.255.3
+set protocols bgp group overlay family evpn signaling
+set protocols bgp group overlay peer-as 65200
+set protocols bgp group overlay local-as 65200
+set protocols bgp group overlay neighbor 10.0.255.5
+set protocols bgp group overlay neighbor 10.0.255.4
+set protocols evpn vni-options vni 2010
+set protocols evpn encapsulation vxlan
+set protocols evpn extended-vni-list 2010
+set protocols lldp interface all
+set protocols igmp-snooping vlan default
+set switch-options vtep-source-interface lo0.0
+set switch-options route-distinguisher 10.0.255.3:1
+set switch-options vrf-target target:65200:1
+set vlans v10 vlan-id 10
+set vlans v10 vxlan vni 2010
 
-#LEAF4 config
+
 set system host-name LEAF4
-delete interfaces
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set system extensions providers juniper license-type juniper deployment-scope commercial
+set system extensions providers chef license-type juniper deployment-scope commercial
 set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.3/31
 set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.9/31
+set interfaces em1 unit 0 family inet address 169.254.0.2/24
 set interfaces lo0 unit 0 family inet address 10.0.255.4/32
+set forwarding-options storm-control-profiles default all
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then load-balance per-packet
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then accept
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from protocol direct
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from route-filter 10.0.255.0/24 orlonger
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK then accept
+set routing-options forwarding-table export LOAD_BALANCE
+set protocols bgp group underlay export LOOPBACK>UNDERLAY
+set protocols bgp group underlay local-as 65104
+set protocols bgp group underlay multipath multiple-as
+set protocols bgp group underlay neighbor 172.16.0.2 peer-as 65101
+set protocols bgp group underlay neighbor 172.16.0.8 peer-as 65102
+set protocols bgp group overlay local-address 10.0.255.4
+set protocols bgp group overlay family evpn signaling
+set protocols bgp group overlay peer-as 65200
+set protocols bgp group overlay local-as 65200
+set protocols bgp group overlay neighbor 10.0.255.3
+set protocols bgp group overlay neighbor 10.0.255.5
+set protocols igmp-snooping vlan default
+set vlans default vlan-id 1
 
-#LEAF5 config
+
 set system host-name LEAF5
-delete interfaces
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set system extensions providers juniper license-type juniper deployment-scope commercial
+set system extensions providers chef license-type juniper deployment-scope commercial
+set interfaces xe-0/0/0 unit 0 family ethernet-switching vlan members v10
 set interfaces xe-0/0/1 unit 0 family inet address 172.16.0.5/31
 set interfaces xe-0/0/2 unit 0 family inet address 172.16.0.11/31
+set interfaces em1 unit 0 family inet address 169.254.0.2/24
 set interfaces lo0 unit 0 family inet address 10.0.255.5/32
+set forwarding-options storm-control-profiles default all
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then load-balance per-packet
+set policy-options policy-statement LOAD_BALANCE term LOADBAL then accept
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from protocol direct
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK from route-filter 10.0.255.0/24 orlonger
+set policy-options policy-statement LOOPBACK>UNDERLAY term LOOPBACK then accept
+set routing-options router-id 10.0.255.5
+set routing-options forwarding-table export LOAD_BALANCE
+set protocols bgp group underlay export LOOPBACK>UNDERLAY
+set protocols bgp group underlay local-as 65105
+set protocols bgp group underlay multipath multiple-as
+set protocols bgp group underlay neighbor 172.16.0.4 peer-as 65101
+set protocols bgp group underlay neighbor 172.16.0.10 peer-as 65102
+set protocols bgp group overlay local-address 10.0.255.5
+set protocols bgp group overlay family evpn signaling
+set protocols bgp group overlay peer-as 65200
+set protocols bgp group overlay local-as 65200
+set protocols bgp group overlay neighbor 10.0.255.3
+set protocols bgp group overlay neighbor 10.0.255.4
+set protocols evpn encapsulation vxlan
+set protocols evpn extended-vni-list 2010
+set protocols igmp-snooping vlan default
+set switch-options vtep-source-interface lo0.0
+set switch-options route-distinguisher 10.0.255.5:1
+set switch-options vrf-target target:65200:1
+set vlans v10 vlan-id 10
+set vlans v10 vxlan vni 2010
